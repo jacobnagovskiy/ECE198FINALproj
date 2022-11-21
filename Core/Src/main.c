@@ -95,26 +95,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-  	 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
-    /* USER CODE BEGIN 3 */
-	  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == 1)
-	  {
-		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
-		  while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == 1)
-		  {
-			  HAL_Delay(10000);
-		  }
-		  HAL_Delay(5000);
-		  for (int i = 0; i <= 2; i++)
-		  {
-			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
-			  HAL_Delay(1000);
-			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
-			  HAL_Delay(1000);
-		  }
-		  	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
-	  }
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // if the pin is HIGH
+    {
+     HAL_GPIO_WritePin (GPIOB, GPIO_PIN_14, GPIO_PIN_SET); // turn on LED
+     HAL_Delay (1000);
+     HAL_GPIO_WritePin (GPIOA, GPIO_PIN_0, GPIO_PIN_RESET); // LED OFF
+     while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)); //wait for pin to go low
+    }
   }
 }
 
@@ -284,3 +271,5 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
+
