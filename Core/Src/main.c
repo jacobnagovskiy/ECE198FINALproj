@@ -81,7 +81,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+int state{};
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -95,13 +95,47 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // if the pin is HIGH
-    {
-     HAL_GPIO_WritePin (GPIOB, GPIO_PIN_14, GPIO_PIN_SET); // turn on LED
-     HAL_Delay (1000);
-     HAL_GPIO_WritePin (GPIOA, GPIO_PIN_0, GPIO_PIN_RESET); // LED OFF
-     while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)); //wait for pin to go low
-    }
+	  GPIO_PinState val1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+	  	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+	  	  val1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+	  	  if (val1 == GPIO_PIN_SET)
+	  	  {
+	            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+	  		  val1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+	  		  HAL_Delay(10000);
+
+	  		  if (state == 0)
+	  		  {
+	  			  state = 1;
+	  		  }
+	  	  }
+	  	  else
+	  	  {
+	  		  while (state == GPIO_PIN_SET)
+	  		  {
+	  			  for (int i = 0; i <= 3; i++)
+	  			  {
+	  		          HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+	  				  HAL_Delay(300);
+
+	  		          HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+	  				  HAL_Delay(300);
+	  			  }
+	  	          HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+	  			  HAL_Delay(300);
+	  			  val1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+
+	  			  while (val1 == 0)
+	  			  {
+	  				  HAL_Delay(300);
+	  				  val1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+	  				  if (val1 == 1)
+	  				  {
+	  					  state = 0;
+	  				  }
+	  			  }
+	  			  }
+	  		  }
   }
 }
 
